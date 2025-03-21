@@ -1,20 +1,36 @@
 import React from "react";
 import { useState } from "react";
+
 export default function App6() {
   const [hobby, setHobby] = useState([]);
-  const [text, setText] = useState();
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
+
   const handleSubmit = () => {
-    setHobby([...hobby, text]);
+    if (!text.trim()) {
+      setError("Hobby cannot be empty!");
+      return;
+    }
+    if (!hobby.includes(text)) {
+      setHobby([...hobby, text]);
+      setText("");
+      setError("");
+    } else {
+      setError("Hobby already exists!");
+    }
   };
+
   return (
     <div>
       <input
         type="text"
         placeholder="Enter your hobby"
+        value={text}
         onChange={(event) => setText(event.target.value)}
-      ></input>
+      />
       <button onClick={handleSubmit}>Add</button>
-      <hr></hr>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <hr />
       {hobby && hobby.map((value, index) => <li key={index}>{value}</li>)}
     </div>
   );
